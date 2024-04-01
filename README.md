@@ -270,7 +270,8 @@ The selected pesticides are among the most commonly used in USA
 rasterized using the same function explained above.
 
 Example of the produced output of the rasterization you can see above.
-Note that all produced GeoTIFFs are available for Zenodo at
+Note that all produced GeoTIFFs described in this computational notebook
+are available from Zenodo at
 <https://dx.doi.org/10.5281/zenodo.10903370>.
 
 After we have produced a time series of pesticides use for USA48 we can
@@ -286,6 +287,9 @@ The visualization shown below is produced as follows:
 3.  Run animation tool by selecting the Temporal Control Panel (Clock
     icon) from Map Navigation Toolbar.
 
+This will produce the following animation showing dissagregated
+Glyposate use (high) from 2000 to 2019.:
+
 <img src="img/pesticides_usa48_timeseries.gif" style="width:70.0%"
 alt="Dissagregated Glyposate use (high) animation from 2000 to 2019." />
 
@@ -299,9 +303,12 @@ weed management systems are needed.
 
 In the last step we can check if increase in pesticide use for
 glyphosate has maybe done some harm to primary productivity. We can use
-for the this the FAPAR trend data (beta coefficient) set explained in
-detail in Hackländer et al. (2024). The positive values in this map
-indicate increase in FAPAR and negative decrease.
+for the this the FAPAR (Fraction of Absorbed Photosynthetically Active
+Radiation) trend data (beta coefficient) set explained in detail in
+Hackländer et al. (2024). The positive values in this map indicate
+increase in FAPAR and negative decrease. FAPAR is the direct measure of
+effective photosynthesis and hence it is a direct estimator of the
+primary productivity.
 
 First, we estimate the average change in the glyphosate use across 2000
 to 2019 using the `diff` function:
@@ -340,7 +347,8 @@ openair::scatterPlot(trend.b, y="mean", x="FAPAR",
 
 which shows that it seems yes using more pesticides seem to have some
 smaller positive effect on FAPAR, however, the overall correlation is
-much smaller than what we would expect:
+much smaller than what we would expect: the counties that have high
+pesticide use, in average do not have higher increse in FAPAR.
 
 <img src="img/fig_scatterplot_fapar_vs_pesticides_trends.jpg"
 style="width:70.0%"
@@ -363,7 +371,7 @@ To cite these data please use:
       title        = {Estimated Annual Agricultural Pesticide Use for USA48 2000 to 2019 (gridded maps at 250-m resolution)},
       year         = {2024},
       publisher    = {EnvirometriX},
-      address      = {Doorwerth},
+      address      = {Doorwerth, the Netherlands},
       version      = {v0.1},
       doi          = {10.5281/zenodo.10903370},
       url          = {https://github.com/Envirometrix/pesticide-use-USA48}

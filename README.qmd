@@ -196,7 +196,8 @@ The selected pesticides are among the most commonly used in USA [@fernandez2014p
 pesticides can be rasterized using the same function explained above.
 
 Example of the produced output of the rasterization you can see above. Note that 
-all produced GeoTIFFs are available for Zenodo at <https://dx.doi.org/10.5281/zenodo.10903370>.
+all produced GeoTIFFs described in this computational notebook are available 
+from Zenodo at <https://dx.doi.org/10.5281/zenodo.10903370>.
 
 After we have produced a time series of pesticides use for USA48 we can visualize 
 and explore it using QGIS. We recommend using for this the [animation functionality](https://www.qgistutorials.com/en/docs/3/animating_time_series.html). 
@@ -205,6 +206,8 @@ The visualization shown below is produced as follows:
 1. Load all time series data into QGIS. Group into a single group sorted based on the year.
 2. Specify begin end times for each layer e.g. 2000-01-01 to 2000-12-31 (now layers have temporal reference).
 3. Run animation tool by selecting the Temporal Control Panel (Clock icon) from Map Navigation Toolbar.
+
+This will produce the following animation showing dissagregated Glyposate use (high) from 2000 to 2019.:
 
 ```{r usa48_anime, echo=FALSE, fig.cap="Dissagregated Glyposate use (high) animation from 2000 to 2019.", out.width="70%"}
 knitr::include_graphics("img/pesticides_usa48_timeseries.gif")
@@ -218,9 +221,10 @@ likely do not help fighting weed that much any more. At least new more diverse w
 management systems are needed. 
 
 In the last step we can check if increase in pesticide use for glyphosate has maybe done 
-some harm to primary productivity. We can use for the this the FAPAR trend data (beta coefficient) 
+some harm to primary productivity. We can use for the this the FAPAR (Fraction of Absorbed Photosynthetically Active Radiation) trend data (beta coefficient) 
 set explained in detail in @hacklander2024land. The positive values in this map 
-indicate increase in FAPAR and negative decrease. 
+indicate increase in FAPAR and negative decrease. FAPAR is the direct measure of 
+effective photosynthesis and hence it is a direct estimator of the primary productivity.
 
 First, we estimate the average change in the glyphosate use across 2000 to 2019 using the `diff` function:
 
@@ -253,7 +257,8 @@ openair::scatterPlot(trend.b, y="mean", x="FAPAR",
 
 which shows that it seems yes using more pesticides seem to have some smaller 
 positive effect on FAPAR, however, the overall correlation is much smaller than 
-what we would expect:
+what we would expect: the counties that have high pesticide use, in average do not 
+have higher increse in FAPAR.
 
 ```{r usa48_trends, echo=FALSE, fig.cap="Relationship between cumulative trend in FAPAR vs cumulative trend in pesticide use across 2000 to 2019.", out.width="70%"}
 knitr::include_graphics("img/fig_scatterplot_fapar_vs_pesticides_trends.jpg")
@@ -276,7 +281,7 @@ To cite these data please use:
   title        = {Estimated Annual Agricultural Pesticide Use for USA48 2000 to 2019 (gridded maps at 250-m resolution)},
   year         = {2024},
   publisher    = {EnvirometriX},
-  address      = {Doorwerth},
+  address      = {Doorwerth, the Netherlands},
   version      = {v0.1},
   doi          = {10.5281/zenodo.10903370},
   url          = {https://github.com/Envirometrix/pesticide-use-USA48}
