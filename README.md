@@ -12,7 +12,7 @@ mainly the census data (Baker and Stone 2015). In this notebook we look
 at how to rasterize these data (from tabular to gridded) and how to
 analyze trends in the pesticide use over the last 20 years (2000–2019).
 The output GeoTIFFs at 250-m spatial resolution are available for
-download from [Zenodo](https://dx.doi.org/10.5281/zenodo.10903370). Some
+download from [Zenodo](https://dx.doi.org/10.5281/zenodo.10903369). Some
 code shown is over-computational and hence it is shown only for
 illustration purposes / it should be run on a coarser resolution
 e.g. 1-km.
@@ -272,7 +272,7 @@ rasterized using the same function explained above.
 Example of the produced output of the rasterization you can see above.
 Note that all produced GeoTIFFs described in this computational notebook
 are available from Zenodo at
-<https://dx.doi.org/10.5281/zenodo.10903370>.
+<https://dx.doi.org/10.5281/zenodo.10903369>.
 
 After we have produced a time series of pesticides use for USA48 we can
 visualize and explore it using QGIS. We recommend using for this the
@@ -362,7 +362,7 @@ spatial layers and explore possible relationships and trends.
 
 ## Recommended citation:
 
-<a rel="license" href="https://zenodo.org/doi/10.5281/zenodo.10903370"><img alt="DOI" style="border-width:0" src="https://zenodo.org/badge/DOI/10.5281/zenodo.10903370.svg" /></a><br />
+<a rel="license" href="https://zenodo.org/doi/10.5281/zenodo.10903369"><img alt="DOI" style="border-width:0" src="https://zenodo.org/badge/DOI/10.5281/zenodo.10903369.svg" /></a><br />
 
 To cite these data please use:
 
@@ -373,7 +373,7 @@ To cite these data please use:
       publisher    = {EnvirometriX},
       address      = {Doorwerth, the Netherlands},
       version      = {v0.1},
-      doi          = {10.5281/zenodo.10903370},
+      doi          = {10.5281/zenodo.10903369},
       url          = {https://github.com/Envirometrix/pesticide-use-USA48}
     }
 
