@@ -8,17 +8,31 @@ Annual agricultural pesticide use in USA is documented by [USGS with
 data publicly available as csv
 files](https://water.usgs.gov/nawqa/pnsp/usage/maps/county-level/).
 These show the pesticide use per county estimated from various records,
-mainly the census data (Baker and Stone 2015). In this notebook we look
-at how to rasterize these data (from tabular to gridded) and how to
-analyze trends in the pesticide use over the last 20 years (2000–2019).
-The output GeoTIFFs at 250-m spatial resolution are available for
-download from [Zenodo](https://dx.doi.org/10.5281/zenodo.10903369). Some
-code shown is over-computational and hence it is shown only for
-illustration purposes / it should be run on a coarser resolution
-e.g. 1-km.
+mainly the census data (Baker and Stone 2015). Falcone, Murphy, and
+Sprague (2018) have produced several of layers quantifying atmospheric
+deposition, agricultural production, livestock, urbanization,
+irrigation, land use, nutrients from fertilizer, dams/reservoirs, and
+pesticide use for USA. Maps of pesticides use are already [available at
+1-km](https://doi.org/10.5066/P9CG7KW8) i.e.  a total of 505 rasters
+posted (101 compounds x 5 years), however covering only 2013 to 2017.
 
-**Disclaimer**: this code is under construction and USGS makes is
-clearly available that there are some limitations to this data:
+In this notebook we look at how to rasterize these data (from tabular to
+gridded) and how to analyze trends in the pesticide use over the last 20
+years (2000–2019). This process is referred to as spatial
+dis-aggregation or spatial downscaling. One example of spatial
+downscaling of is e.g. downscaling of livestock counts from census data
+and then using Machine Learning and appropriate covariates (Li, Hou, and
+Huang 2021).
+
+The output GeoTIFFs we produced at 250-m spatial resolution are
+available for download from
+[Zenodo](https://dx.doi.org/10.5281/zenodo.10903369). Some code shown is
+over-computational and hence it is shown only for illustration purposes
+/ it should be run on a coarser resolution e.g. 1-km or for a subset of
+states.
+
+**Disclaimer**: this code and data is under construction and USGS makes
+is clearly available that there are some limitations to this data:
 
 - These estimates are made by using projected county crop acres from the
   previous Census of Agriculture and are expected to be revised upon
@@ -251,6 +265,13 @@ to gridded map using the computed field; `terra::mask` will subset
 pixels to only the cropland mask, and `writeRaster` will write the
 GeoTIFF.
 
+It is important to emphasize that, even though the spatial resolution of
+maps is 250-m, these maps still only show pesticide use per county /
+cropland mask. To actually downscale pesticide use to better match
+reality, one would probably need to use more detailed information on
+crop-types (e.g. from the [CropScape
+project](https://nassgeodata.gmu.edu/CropScape/)) and similar.
+
 Finally, we can run this code in parallel to speed up computing (it
 takes about 20 minutes to rasterize four compounds), but if you switch
 to a coarser resolution e.g. 1-km you can significantly speed up
@@ -287,8 +308,8 @@ The visualization shown below is produced as follows:
 3.  Run animation tool by selecting the Temporal Control Panel (Clock
     icon) from Map Navigation Toolbar.
 
-This will produce the following animation showing dissagregated
-Glyposate use (high) from 2000 to 2019.:
+This will produce the following animation showing dis-aggregated
+Glyposate use (high) from 2000 to 2019:
 
 <img src="img/pesticides_usa48_timeseries.gif" style="width:70.0%"
 alt="Dissagregated Glyposate use (high) animation from 2000 to 2019." />
@@ -302,13 +323,14 @@ not help fighting weed that much any more. At least new more diverse
 weed management systems are needed.
 
 In the last step we can check if increase in pesticide use for
-glyphosate has maybe done some harm to primary productivity. We can use
-for the this the FAPAR (Fraction of Absorbed Photosynthetically Active
-Radiation) trend data (beta coefficient) set explained in detail in
-Hackländer et al. (2024). The positive values in this map indicate
-increase in FAPAR and negative decrease. FAPAR is the direct measure of
-effective photosynthesis and hence it is a direct estimator of the
-primary productivity.
+glyphosate is trully beneficial  
+to e.g. increasing primary productivity. We can use for the this the
+FAPAR (Fraction of Absorbed Photosynthetically Active Radiation) trend
+data (beta coefficient) set explained in detail in Hackländer et al.
+(2024) and matching exactly the 250-m resolution. The positive values in
+the FAPAR trend map (2000-2021) indicate increase in FAPAR and negative
+decrease. FAPAR is the direct measure of effective photosynthesis and
+hence it is a direct estimator of the primary productivity.
 
 First, we estimate the average change in the glyphosate use across 2000
 to 2019 using the `diff` function:
@@ -345,10 +367,12 @@ openair::scatterPlot(trend.b, y="mean", x="FAPAR",
 ```
 ````
 
-which shows that it seems yes using more pesticides seem to have some
-smaller positive effect on FAPAR, however, the overall correlation is
-much smaller than what we would expect: the counties that have high
-pesticide use, in average do not have higher increse in FAPAR.
+which shows that: yes, using more pesticides seems to have some smaller
+positive effect on FAPAR, however, the overall correlation is much
+smaller than what we would expect: the counties that have high pesticide
+use, in average do not have higher increase in FAPAR. These are
+preliminary tests and more in-depth analysis would be needed, also
+considering all the data limitations listed above.
 
 <img src="img/fig_scatterplot_fapar_vs_pesticides_trends.jpg"
 style="width:70.0%"
@@ -356,9 +380,13 @@ alt="Relationship between cumulative trend in FAPAR vs cumulative trend in pesti
 
 So in summary, using the [terra package](https://rspatial.org/) is
 highly efficient to doing various raster calculations and for converting
-polyons to grids (many functions run in C++ and can be run in parallel).
-In combination with GDAL, QGIS and other tools, one can quickly overlay
-spatial layers and explore possible relationships and trends.
+polygons to grids (many functions run in C++ and can be run in
+parallel). In combination with GDAL, QGIS and other tools, one can
+quickly overlay spatial layers and explore possible relationships and
+trends. QGIS provides functionality to interactively visualize temporal
+changes. More detailed datasets such as the CropScape (crop types mapped
+at 30-m for 2000 to 2023) can be used to further downscale these
+pesticide use maps.
 
 ## Recommended citation:
 
@@ -401,6 +429,16 @@ Glyphosate Resistance in a Major Agricultural Weed.” *New Phytologist*
 
 </div>
 
+<div id="ref-falcone2018regional" class="csl-entry">
+
+Falcone, James A, Jennifer C Murphy, and Lori A Sprague. 2018. “Regional
+Patterns of Anthropogenic Influences on Streams and Rivers in the
+Conterminous United States, from the Early 1970s to 2012.” *Journal of
+Land Use Science* 13 (6): 585–614.
+<https://doi.org/10.1080/1747423X.2019.1590473>.
+
+</div>
+
 <div id="ref-fernandez2014pesticide" class="csl-entry">
 
 Fernandez-Cornejo, Jorge, Richard F Nehring, Craig Osteen, Seth
@@ -427,6 +465,15 @@ Gage, Aaron Hager, Joseph Ikley, et al. 2023. “The Silver Bullet That
 Wasn’t: Rapid Agronomic Weed Adaptations to Glyphosate in North
 America.” *PNAS Nexus* 2 (12): pgad338.
 <https://doi.org/10.1093/pnasnexus/pgad338>.
+
+</div>
+
+<div id="ref-rs13245038" class="csl-entry">
+
+Li, Xianghua, Jinliang Hou, and Chunlin Huang. 2021. “High-Resolution
+Gridded Livestock Projection for Western China Based on Machine
+Learning.” *Remote Sensing* 13 (24).
+<https://doi.org/10.3390/rs13245038>.
 
 </div>
 
