@@ -107,16 +107,32 @@ package](https://davidcarslaw.github.io/openair/):
 
 ``` r
 sel.pp = c("GLYPHOSATE", "ATRAZINE", "ACETOCHLOR", "METOLACHLOR")
-openair::scatterPlot(pp[pp$COMPOUND %in% sel.pp,], y="EPEST_HIGH_KG", x="YEAR", 
+df = pp[pp$COMPOUND %in% sel.pp,]
+openair::scatterPlot(df, y="EPEST_HIGH_KG", x="YEAR", 
                      method="hexbin", col="increment", type="COMPOUND", #log.y=TRUE, 
                      ylab="EPEST_HIGH_KG", xlab="Year")
 ```
 
 ![](README_files/figure-commonmark/unnamed-chunk-3-1.png)
 
-From the four most frequent compounds, all seem to have an increase use,
-but especially the Glyphosate. Note this only shows total pesticides use
-per county. Because each county is different size, and because
+To focus on a specific county e.g. Livingston county in the Illinois
+state, we can run:
+
+``` r
+library(tidyverse)
+library(lubridate)
+## Livingston county
+df$date = ymd(paste0(df$YEAR, "/06", "/15"))
+df[df$ID=="17_105",] %>% ggplot( aes(x = date, y = EPEST_HIGH_KG, color = COMPOUND, group = COMPOUND)) +
+geom_line() + geom_point() +   theme_test()
+```
+
+![](README_files/figure-commonmark/unnamed-chunk-4-1.png)
+
+From the four most frequent compounds, all seem to have a constant or an
+increase in use, but especially the Glyphosate seem to be increasingly
+used from 2006/2007/2008. Note these numbers only shows total pesticides
+use per county. Because each county is different size, and because
 percentage of agricultural land within each county differs, we really
 want to estimate the pesticide use in kg/km-square (or
 pounds/mile-square, where 1 kg/km2 = 5.71 pounds/mile2). In other words,
@@ -384,7 +400,8 @@ polygons to grids (many functions run in C++ and can be run in
 parallel). In combination with GDAL, QGIS and other tools, one can
 quickly overlay spatial layers and explore possible relationships and
 trends. QGIS provides functionality to interactively visualize temporal
-changes. More detailed datasets such as the CropScape (crop types mapped
+changes. More detailed datasets such as the
+[CropScape](https://nassgeodata.gmu.edu/CropScape/) (crop types mapped
 at 30-m for 2000 to 2023) can be used to further downscale these
 pesticide use maps.
 
